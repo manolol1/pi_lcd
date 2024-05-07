@@ -36,7 +36,7 @@ def getCurrentWeather():
 
 def getCurrentTemperature():
     global weatherData
-    return weatherData['main']['temp']
+    return weatherData["main"]["temp"]
 
 weatherThread = threading.Thread(target=weatherLoop) # start data refreshing loop in a separate thread
 weatherThread.start()
