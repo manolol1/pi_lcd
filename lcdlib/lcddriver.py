@@ -78,7 +78,6 @@ class lcd:
 
    def lcd_write_four_bits(self, data):
       self.lcd_device.write_cmd(data | LCD_BACKLIGHT)
-      self.lcd_strobe(data)
 
    # write a command to lcd
    def lcd_write(self, cmd, mode=0):
