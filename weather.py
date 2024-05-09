@@ -30,9 +30,10 @@ def weatherLoop():
 
         
         if (firstLoad):
+            # reload faster for the first time to avoid having no data when the request takes too long
             firstLoad = False
             print("Next weather data refresh in 20 seconds...")
-            sleep(20) # only wait 20 seconds fore refreshing the first time to avoid having no data for a long time
+            sleep(20)
         else:
             print("Next weather data refresh in " + str(refreshInterval) + " seconds...")
             sleep(refreshInterval)
