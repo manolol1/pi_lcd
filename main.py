@@ -11,7 +11,12 @@ backlight = True
 
 def setBacklight(state):
     global backlight
-    backlight = state
+    if (state == 0):
+        backlight = False
+    elif (state == 1):
+        backlight = True
+    elif (state == 2):
+        backlight = not backlight
 
 server.start_server(setBacklight)
 

@@ -5,18 +5,24 @@ from threading import Thread
 app = Flask(__name__)
 
 @app.route('/')
+@app.route('/backlight')
 def index():
-    return "To control lcd backlight, use /backlight/on or /backlight/off."
+    return "To control lcd backlight, use /backlight/on or /backlight/off.<br>Toggle with /backlight/toggle."
 
 @app.route('/backlight/on')
 def backlight_on():
-    setBacklight(True)
+    setBacklight(1)
     return "Backlight on"
 
 @app.route('/backlight/off')
 def backlight_off():
-    setBacklight(False)
+    setBacklight(0)
     return "Backlight off"
+
+@app.route('/backlight/toggle')
+def backlight_toggle():
+    setBacklight(2)
+    return "Backlight toggled"
 
 def start_server(backlight_function):
     global setBacklight
