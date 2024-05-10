@@ -7,16 +7,22 @@ import datetime
 lcd = lcddriver.lcd()
 
 global backlight
-backlight = True
+backlight = 1
 
 def setBacklight(state):
     global backlight
-    if (state == 0):
-        backlight = False
-    elif (state == 1):
-        backlight = True
-    elif (state == 2):
-        backlight = not backlight
+
+    if (state == "toggle"):
+        match backlight:
+            case 0:
+                backlight = 1
+            case 1:
+                backlight = 0
+    else:
+        backlight = state
+
+def autoBacklight():
+    pass #TODO: Use light sensor
 
 server.start_server(setBacklight)
 
@@ -25,9 +31,12 @@ while (True):
     lcd.lcd_display_string(f"{dt.hour:02d}:{dt.minute:02d} - {dt.day:02d}.{dt.month:02d}.{dt.year:04d}", 1)
     lcd.lcd_display_string(str(weather.getCurrentTemperature()) + "ßC", 2)
 
-    if (backlight):
-        lcd.lcd_backlight("on")
-    else:
-        lcd.lcd_backlight("off")
+    match backlight:
+        case 0:
+            lcd.lcd_backlight("off")
+        case 1:
+            lcd.lcd_backlight("on")
+        case 2:
+            autoBacklight()
 
     sleep(1)

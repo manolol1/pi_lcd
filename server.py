@@ -21,7 +21,7 @@ def backlight_off():
 
 @app.route('/backlight/toggle')
 def backlight_toggle():
-    setBacklight(2)
+    setBacklight("toggle")
     return "Backlight toggled"
 
 def start_server(backlight_function):
