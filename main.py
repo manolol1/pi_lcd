@@ -3,6 +3,7 @@ import weather
 import server
 from time import *
 import datetime
+import config
 
 lcd = lcddriver.lcd()
 
@@ -26,7 +27,8 @@ def setBacklight(state):
 def autoBacklight():
     pass #TODO: Use light sensor
 
-server.start_server(setBacklight)
+if (config.getServerEnabled() == "true"):
+    server.start_server(setBacklight)
 
 while (True):
     dt = datetime.datetime.now()
