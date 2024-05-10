@@ -16,8 +16,10 @@ def setBacklight(state):
         match backlight:
             case 0:
                 backlight = 1
+                return 1
             case 1:
                 backlight = 0
+                return 0
     else:
         backlight = state
 

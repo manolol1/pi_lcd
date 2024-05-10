@@ -12,17 +12,23 @@ def index():
 @app.route('/backlight/on')
 def backlight_on():
     setBacklight(1)
-    return "Backlight on"
+    return "Backlight: on"
 
 @app.route('/backlight/off')
 def backlight_off():
     setBacklight(0)
-    return "Backlight off"
+    return "Backlight: off"
+
+@app.route('/backlight/auto')
+def backlight_auto():
+    setBacklight("2")
+    return "Backlight: auto"
 
 @app.route('/backlight/toggle')
 def backlight_toggle():
-    setBacklight("toggle")
-    return "Backlight toggled"
+    state = setBacklight("toggle")
+    return "Backlight toggled (now " + ("on" if state == 1 else "off") + ")"
+
 
 def start_server(backlight_function):
     global setBacklight
