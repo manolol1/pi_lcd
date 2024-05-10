@@ -2,6 +2,7 @@ from time import *
 import requests
 import threading
 import config
+import sys
 
 global weatherKey, apiEndpoint, weatherData, weatherCity, firstLoad, refreshInterval
 weatherKey = config.getWeatherApiKey()
@@ -47,5 +48,12 @@ def getCurrentTemperature():
     global weatherData
     return weatherData["main"]["temp"]
 
-weatherThread = threading.Thread(target=weatherLoop) # start data refreshing loop in a separate thread
-weatherThread.start()
+def startWeatherThread():
+    if (config.testWeatherApi() == False):
+        print("Weather API test failed. Please check your weather key and location in config.ini!")
+        sys.exit(1)
+    
+    weatherThread = threading.Thread(target=weatherLoop)
+    weatherThread.start()
+    print("Weather thread started.")
+    return weatherThread

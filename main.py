@@ -1,9 +1,10 @@
 import lcdlib.lcddriver as lcddriver
 import weather
-import server
 from time import *
 import datetime
 import config
+
+weather.startWeatherThread()
 
 lcd = lcddriver.lcd()
 
@@ -28,6 +29,7 @@ def autoBacklight():
     pass #TODO: Use light sensor
 
 if (config.getServerEnabled() == "true"):
+    import server
     server.start_server(setBacklight)
 
 while (True):
