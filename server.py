@@ -27,7 +27,7 @@ def backlight_auto():
 @app.route('/backlight/toggle')
 def backlight_toggle():
     state = setBacklight("toggle")
-    return "Backlight toggled (now " + ("on" if state == 1 else "off") + ")"
+    return "Backlight toggled (now " + state + ")"
 
 
 def start_server(backlight_function):

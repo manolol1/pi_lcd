@@ -15,13 +15,25 @@ def setBacklight(state):
     global backlight
 
     if (state == "toggle"):
-        match backlight:
-            case 0:
-                backlight = 1
-                return 1
-            case 1:
-                backlight = 0
-                return 0
+        if (config.getLightSensorEnabled() == "false"):
+            match backlight:
+                case 0:
+                    backlight = 1
+                    return "on"
+                case 1:
+                    backlight = 0
+                    return "off"
+        else:
+            match backlight:
+                case 0:
+                    backlight = 1
+                    return "on"
+                case 1:
+                    backlight = 2
+                    return "auto"
+                case 2:
+                    backlight = 0
+                    return "off"
     else:
         backlight = state
 
@@ -31,6 +43,19 @@ def autoBacklight():
 if (config.getServerEnabled() == "true"):
     import server
     server.start_server(setBacklight)
+
+if (config.getButtonEnabled() == "true"):
+    from gpiozero import Button # type: ignore
+
+    try:
+        button_pin = int(config.getButtonPin())
+        button = Button(button_pin)
+    except ValueError:
+        print(f"Invalid pin number: {config.getButtonPin()}")
+    except RuntimeError as e:
+        print(f"Failed to initialize button on pin {button_pin}: {str(e)}")
+        
+    button.when_pressed = lambda: setBacklight("toggle")
 
 while (True):
     dt = datetime.datetime.now()

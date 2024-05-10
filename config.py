@@ -15,7 +15,10 @@ if not os.path.exists('config.ini'):
                            'Port': '5000'}
     
     config['Button'] = {'Enabled': 'False',
-                        'Pin': '26'}
+                        'Pin': '0'}
+    
+    config['LightSensor'] = {'Enabled': 'False',
+                             'Pin': '0'}
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -49,9 +52,15 @@ try:
         return config['WebServer']['Port']
     
     def getButtonEnabled():
-        return config['Button']['ButtonEnabled'].lower()
+        return config['Button']['Enabled'].lower()
     
     def getButtonPin():
         return config['Button']['Pin']
+    
+    def getLightSensorEnabled():
+        return config['LightSensor']['Enabled'].lower()
+    
+    def getLightSensorPin():
+        return config['LightSensor']['Pin']
 except:
     print("An error occured while reading or writing the config file")
