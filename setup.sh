@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -z "$BASH_VERSION" ]
+then
+    echo "Please run this script with bash, not sh or any other shell."
+    echo "Other shells like sh might not support virtual environments."
+    exit 1
+fi
+
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-venv
 
