@@ -21,7 +21,7 @@ def backlight_off():
 
 @app.route('/backlight/auto')
 def backlight_auto():
-    setBacklight("2")
+    setBacklight(2)
     return "Backlight: auto"
 
 @app.route('/backlight/toggle')

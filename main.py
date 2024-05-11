@@ -3,6 +3,7 @@ import weather
 from time import *
 import datetime
 import config
+import threading
 
 weather.startWeatherThread()
 
@@ -12,7 +13,7 @@ global backlight
 backlight = 1
 
 def setBacklight(state):
-    global backlight
+    global backlight, notification
 
     if (state == "toggle"):
         if (config.getLightSensorEnabled() == "false"):
@@ -30,15 +31,19 @@ def setBacklight(state):
                     return "on"
                 case 1:
                     backlight = 2
+                    notification("Backlight mode: auto")
                     return "auto"
                 case 2:
                     backlight = 0
                     return "off"
+    elif (state == 2):
+        backlight = 2
+        notification("Backlight mode: auto")
+        return "auto"
     else:
-        backlight = state
-
-def autoBacklight():
-    pass #TODO: Use light sensor
+        backlight = int(state)
+        return state
+    
 
 if (config.getServerEnabled() == "true"):
     import server
@@ -51,11 +56,52 @@ if (config.getButtonEnabled() == "true"):
         button_pin = int(config.getButtonPin())
         button = Button(button_pin)
     except ValueError:
-        print(f"Invalid pin number: {config.getButtonPin()}")
+        print(f"Invalid button pin number: {config.getButtonPin()}")
     except RuntimeError as e:
         print(f"Failed to initialize button on pin {button_pin}: {str(e)}")
         
     button.when_pressed = lambda: setBacklight("toggle")
+
+
+if (config.getLightSensorEnabled() == "true"):
+    from gpiozero import DigitalInputDevice # type: ignore
+
+    try:
+        lightSensor_pin = int(config.getLightSensorPin())
+        lightSensor = DigitalInputDevice(lightSensor_pin)
+    except ValueError:
+        print(f"Invalid light sensor pin number: {config.getLightSensorPin()}")
+    except RuntimeError as e:
+        print(f"Failed to initialize light sensor on pin {lightSensor_pin}: {str(e)}")
+    
+    backlight = 2
+
+def autoBacklight():
+    global lightSensor
+
+    if (lightSensor.value == 0):
+        lcd.lcd_backlight("on")
+    else:
+        lcd.lcd_backlight("off")
+
+def notificationLoop(message):
+    global backlight
+    temp = backlight
+    
+    lcd.lcd_display_string(message, 4)
+
+    timeLeft = 5
+    while (timeLeft > 0):
+        backlight = 1
+        sleep(1)
+        timeLeft -= 1
+    
+    backlight = temp
+    lcd.lcd_clear()
+
+def notification(message):
+    notificationThread = threading.Thread(target=notificationLoop, args=(message,))
+    notificationThread.start()
 
 while (True):
     dt = datetime.datetime.now()
