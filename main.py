@@ -44,12 +44,12 @@ def setBacklight(state):
         if (config.getLightSensorEnabled() == "false"):
             backlight = 1
             print("Light sensor is disabled. Auto backlight mode is not available.")
-            notification("auto mode disabled")
+            notification("auto mode off" if config.getLcdColumns() < 20 else "auto mode disabled")
             return
         
         backlight = 2
 
-        notification("Backlight mode: auto")
+        notification("Backlight: auto" if config.getLcdColumns() < 20 else "Backlight mode: auto")
         return "auto"
     else:
         backlight = int(state)
@@ -115,7 +115,9 @@ def notificationLoop():
                 timeLeft -= 1
             
             backlight = temp
-            lcd.lcd_clear()
+            
+            with lcd_lock:
+                lcd.lcd_clear()
             lineBlocked[config.getLcdLines() - 1] = False
         else:
             sleep(1)
@@ -134,7 +136,10 @@ while (True):
 
     with lcd_lock:
         if (not lineBlocked[0]):
-            lcd.lcd_display_string(f"{dt.hour:02d}:{dt.minute:02d} - {dt.day:02d}.{dt.month:02d}.{dt.year:04d}", 1)
+            if (config.getLcdColumns() >= 18):
+                lcd.lcd_display_string(f"{dt.hour:02d}:{dt.minute:02d} - {dt.day:02d}.{dt.month:02d}.{dt.year:04d}", 1)
+            else:
+                lcd.lcd_display_string(f"{dt.hour:02d}:{dt.minute:02d}/{dt.day:02d}.{dt.month:02d}.{dt.year:04d}", 1)
 
         if (not lineBlocked[1]):
             lcd.lcd_display_string(str(weather.getCurrentTemperature()) + "ßC", 2)

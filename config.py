@@ -10,7 +10,9 @@ if not os.path.exists('config.ini'):
     print("No config file found. Generating default config...")
     
     config['general'] = {'default_backlight': '1',
-                         'lcd_lines': '4'}
+                         'lcd_lines': '4',
+                         'lcd_columns': '20'
+                         }
 
     config['weather'] = {'api_key': 'insert your openweathermap.org api key here',
                          'location': 'linz',
@@ -50,6 +52,9 @@ try:
 
     def getLcdLines():
         return int(config['general']['lcd_lines'])
+
+    def getLcdColumns():
+        return int(config['general']['lcd_columns'])
 
     def getWeatherApiKey():
         return config['weather']['api_key']
