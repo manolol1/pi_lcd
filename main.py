@@ -10,7 +10,7 @@ weather.startWeatherThread()
 lcd = lcddriver.lcd()
 
 global backlight
-backlight = 1
+backlight = config.getDefaultBacklight()
 
 def setBacklight(state):
     global backlight, notification
@@ -37,7 +37,14 @@ def setBacklight(state):
                     backlight = 0
                     return "off"
     elif (state == 2):
+        if (config.getLightSensorEnabled() == "false"):
+            backlight = 1
+            print("Light sensor is disabled. Auto backlight mode is not available.")
+            notification("auto mode disabled")
+            return
+        
         backlight = 2
+
         notification("Backlight mode: auto")
         return "auto"
     else:

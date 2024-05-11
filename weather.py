@@ -10,7 +10,7 @@ apiEndpoint = "https://api.openweathermap.org/data/2.5/weather"
 weatherData = {"main": {"temp": 0}, "weather": [{"description": "e"}]} # temporary data to avoid crashes due to unset values
 weatherCity = config.getWeatherLocation()
 
-refreshInterval = 300
+refreshInterval = config.getWeatherRefreshInterval()
 firstLoad = True
 
 def weatherLoop():

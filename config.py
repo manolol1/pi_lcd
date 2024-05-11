@@ -8,17 +8,22 @@ config = configparser.ConfigParser()
 # generate default config, if no config file exists
 if not os.path.exists('config.ini'):
     print("No config file found. Generating default config...")
-    config['Weather'] = {'ApiKey': 'insert your openweathermap.org api key here',
-                         'Location': 'Linz',}
     
-    config['WebServer'] = {'Enabled': 'False',
-                           'Port': '5000'}
+    config['general'] = {'default_backlight': '1'}
+
+    config['weather'] = {'api_key': 'insert your openweathermap.org api key here',
+                         'location': 'linz',
+                         'refresh_interval': '300'
+                         }
     
-    config['Button'] = {'Enabled': 'False',
-                        'Pin': '0'}
+    config['webserver'] = {'enabled': 'false',
+                           'port': '5000'}
     
-    config['LightSensor'] = {'Enabled': 'False',
-                             'Pin': '0'}
+    config['button'] = {'enabled': 'false',
+                        'pin': '0'}
+    
+    config['lightsensor'] = {'enabled': 'false',
+                             'pin': '0'}
 
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
@@ -39,28 +44,34 @@ def testWeatherApi():
 try:
     config.read('config.ini')
 
+    def getDefaultBacklight():
+        return int(config['general']['default_backlight'])
+
     def getWeatherApiKey():
-        return config['Weather']['ApiKey']
+        return config['weather']['api_key']
 
     def getWeatherLocation():
-        return config['Weather']['Location']
+        return config['weather']['location']
+    
+    def getWeatherRefreshInterval():
+        return int(config['weather']['refresh_interval'])
 
     def getServerEnabled():
-        return config['WebServer']['Enabled'].lower()
+        return config['webserver']['enabled'].lower()
 
     def getServerPort():
-        return config['WebServer']['Port']
+        return config['webserver']['port']
     
     def getButtonEnabled():
-        return config['Button']['Enabled'].lower()
+        return config['button']['enabled'].lower()
     
     def getButtonPin():
-        return config['Button']['Pin']
+        return config['button']['pin']
     
     def getLightSensorEnabled():
-        return config['LightSensor']['Enabled'].lower()
+        return config['lightsensor']['enabled'].lower()
     
     def getLightSensorPin():
-        return config['LightSensor']['Pin']
+        return config['lightsensor']['pin']
 except:
     print("An error occured while reading or writing the config file")
