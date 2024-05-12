@@ -7,8 +7,8 @@ then
     exit 1
 fi
 
-sudo apt-get update
-sudo apt-get install -y python3 python3-pip python3-venv
+sudo apt update
+sudo apt install -y python3 python3-pip python3-venv
 
 echo "Creating virtual environment"
 python3 -m venv venv
