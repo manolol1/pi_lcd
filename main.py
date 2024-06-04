@@ -4,6 +4,8 @@ from time import *
 import datetime
 import config
 import threading
+import signal
+import sys
 
 weather.startWeatherThread()
 
@@ -130,6 +132,18 @@ def notification(message):
         notificationQueue.append(message)
     else:
         print(f"Notification \"{message}\" was blocked due to spamming.")
+
+# try sending a message before the script is stopped
+def exit_handler(signal, frame):
+    # instantly send a message without going through the queue
+    with lcd_lock:
+        lineBlocked[config.getLcdLines() - 1] = True
+        lcd.lcd_display_string("Script stopped", config.getLcdLines())
+        print("Program stopped.")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, exit_handler) # for example, when pressing Ctrl+C
+signal.signal(signal.SIGTERM, exit_handler) # reboot, shutdowg, ... - unreliable, but might work in some cases
 
 while (True):
     dt = datetime.datetime.now()
