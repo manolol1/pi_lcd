@@ -143,7 +143,7 @@ def exit_handler(signal, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, exit_handler) # for example, when pressing Ctrl+C
-signal.signal(signal.SIGTERM, exit_handler) # reboot, shutdowg, ... - unreliable, but might work in some cases
+signal.signal(signal.SIGTERM, exit_handler) # reboot, shutdown, ... - unreliable, but might work in some cases
 
 while (True):
     dt = datetime.datetime.now()
