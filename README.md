@@ -1,3 +1,5 @@
+# This repository was moved to https://forgejo.manolol.xyz/mario/pi_lcd
+
 # Time, Date and Temperature Display
 
 ## Features
